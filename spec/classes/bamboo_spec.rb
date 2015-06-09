@@ -29,7 +29,7 @@ describe 'bamboo' do
           it { is_expected.to contain_file('/opt/bamboo').with(
             :ensure => 'directory',
             :owner => 'bamboo',
-            :recurse => true,
+            :recurse => true
           ).that_requires('User[bamboo]') }
           it { is_expected.to contain_staging__deploy('atlassian-bamboo-5.8.1.tar.gz').with(
             :target => '/opt/bamboo',
