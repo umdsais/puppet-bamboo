@@ -19,7 +19,7 @@ class bamboo::install {
   }
   staging::deploy { "atlassian-bamboo-${::bamboo::version}.tar.gz":
     target  => $::bamboo::install_dir,
-    source  => "${::bamboo::download_url}/atlassian-bamboo-${::bamboo::version}.tar.gz",
+    source  => "${::bamboo::download_url}atlassian-bamboo-${::bamboo::version}.tar.gz",
     user    => $::bamboo::bamboo_user,
     require => File[$::bamboo::install_dir],
   }
