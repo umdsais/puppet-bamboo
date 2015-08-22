@@ -6,7 +6,7 @@
 class bamboo::params {
   $bamboo_user    = 'bamboo'
   $version        = '5.8.1'
-  $download_url   = "https://www.atlassian.com/software/bamboo/downloads/binary/atlassian-bamboo-${version}.tar.gz"
+  $download_url   = 'https://www.atlassian.com/software/bamboo/downloads/binary/'
   $install_dir    = '/opt/bamboo'
   $data_dir       = '/var/bamboo'
   $log_dir        = '/var/log/bamboo'
