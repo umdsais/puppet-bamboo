@@ -216,64 +216,6 @@ describe 'bamboo' do
     end
   end
 
-  context 'when using staging do' do
-    context 'with default params' do
-      let(:facts) do
-        {
-          :osfamily                  => 'Debian',
-          :operatingsystemmajrelease => '7',
-        }
-      end
-      let(:params) do
-        {
-          'deploy_module' => 'staging',
-        }
-      end
-      it { is_expected.to contain_staging__file('atlassian-bamboo-5.10.2.tar.gz') }
-      it { is_expected.to contain_staging__extract('atlassian-bamboo-5.10.2.tar.gz') }
-    end
-    context 'with parameter overrides' do
-      let(:facts) do
-        {
-          :osfamily                  => 'Debian',
-          :operatingsystemmajrelease => '7',
-        }
-      end
-      let(:params) do
-        {
-          'deploy_module' => 'staging',
-          'version'       => '5.10.1.1',
-          'format'        => 'tgz',
-          'installdir'    => '/install/path',
-          'homedir'       => '/home/path',
-          'user'          => 'custom_user',
-          'group'         => 'custom_group',
-          'download_url'  => 'http://my.custom.server/path/to/download',
-        }
-      end
-      it do
-        is_expected.to contain_staging__file('atlassian-bamboo-5.10.1.1.tgz').with(
-          'source'  => 'http://my.custom.server/path/to/download/atlassian-bamboo-5.10.1.1.tgz',
-          'timeout' => 1800,
-        ).that_comes_before('Staging::Extract[atlassian-bamboo-5.10.1.1.tgz]')
-      end
-      it do
-        is_expected.to contain_staging__extract('atlassian-bamboo-5.10.1.1.tgz').with(
-          'target'  => '/install/path',
-          'creates' => '/install/path/atlassian-bamboo-5.10.1.1',
-          'user'    => 'custom_user',
-          'group'   => 'custom_group',
-        ).that_notifies(
-          'Exec[chown_/install/path/atlassian-bamboo-5.10.1.1]'
-        ).that_requires(
-          'File[/install/path]'
-        ).that_requires(
-          'User[custom_user]'
-        )
-      end
-    end
-  end
-
   context 'when managing the service' do
     context 'bamboo class without any parameters' do
       context 'on Debian 7' do
