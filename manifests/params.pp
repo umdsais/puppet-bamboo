@@ -4,33 +4,31 @@
 # It sets variables according to platform.
 #
 class bamboo::params {
-  $bamboo_user    = 'bamboo'
-  $version        = '5.8.1'
-  $download_url   = 'https://www.atlassian.com/software/bamboo/downloads/binary/'
-  $install_dir    = '/opt/bamboo'
-  $data_dir       = '/var/bamboo'
-  $log_dir        = '/var/log/bamboo'
-  $service_manage = true
-  $service_ensure = running
-  $service_enable = true
-
-  $java_home      = '/etc/alternatives/java_sdk'
-  $jvm_options    = '-XX:-HeapDumpOnOutOfMemoryError'
-  $jvm_permgen    = '256m'
-  $jvm_xms        = '256m'
-  $jvm_xmx        = '384m'
-
-  $shutdown_port  = '8007'
-  $tomcat_port    = '8085'
-  $max_threads    = '150'
-  $accept_count   = '100'
-  $https_proxy    = undef
-  $tomcat_ajp     = undef
-  $tomcat_ssl     = undef
 
   case $::osfamily {
-    'Debian', 'RedHat', 'Amazon': {
-      $service_name = 'bamboo'
+    'Debian': {
+      $service_lockfile        = '/var/lock/bamboo'
+      if $::operatingsystemmajrelease == '8' {
+        $service_file_location = '/usr/lib/systemd/system/bamboo.service'
+        $service_file_template = 'bamboo/bamboo.service.erb'
+      } elsif $::operatingsystemmajrelease =~ /^7$|^14.04$/ {
+        $service_file_location = '/etc/init.d/bamboo'
+        $service_file_template = 'bamboo/bamboo.initscript.erb'
+      } else {
+        fail("${::operatingsystem} ${::operatingsystemmajrelease} not supported")
+      }
+    }
+    'RedHat', 'Amazon': {
+      $service_lockfile        = '/var/lock/subsys/bamboo'
+      if $::operatingsystemmajrelease == '7' {
+        $service_file_location = '/usr/lib/systemd/system/bamboo.service'
+        $service_file_template = 'bamboo/bamboo.service.erb'
+      } elsif $::operatingsystemmajrelease == '6' {
+        $service_file_location = '/etc/init.d/bamboo'
+        $service_file_template = 'bamboo/bamboo.initscript.erb'
+      } else {
+        fail("${::operatingsystem} ${::operatingsystemmajrelease} not supported")
+      }
     }
     default: {
       fail("${::operatingsystem} not supported")

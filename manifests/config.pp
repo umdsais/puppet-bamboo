@@ -3,20 +3,50 @@
 # This class is called from bamboo for service config.
 #
 class bamboo::config {
-  file { "${::bamboo::install_dir}/current/conf/server.xml":
-    ensure  => file,
-    owner   => $::bamboo::bamboo_user,
+  file { "${::bamboo::webappdir}/conf/server.xml":
+    ensure  => present,
     content => template('bamboo/server.xml.erb'),
+    owner   => $::bamboo::user,
+    group   => $::bamboo::group,
+    mode    => '0640',
   }
-  file { "${::bamboo::install_dir}/current/bin/setenv.sh":
-    ensure  => file,
-    mode    => '0755',
-    owner   => $::bamboo::bamboo_user,
-    content => template('bamboo/setenv.sh.erb'),
+
+  # setenv.sh settings
+  file_line {'java_home':
+    ensure => present,
+    path   => "${::bamboo::webappdir}/bin/setenv.sh",
+    line   => "JAVA_HOME=${::bamboo::javahome}",
+    match  => 'JAVA_HOME=',
   }
-  file { "/etc/init.d/${::bamboo::service_name}":
-    ensure  => file,
-    mode    => '0755',
-    content => template('bamboo/bamboo.init.erb'),
+
+  file_line {'bamboo_home':
+    ensure => present,
+    path   => "${::bamboo::webappdir}/bin/setenv.sh",
+    line   => "BAMBOO_HOME=${::bamboo::homedir}",
+    match  => '#BAMBOO_HOME=',
+  }
+
+  ini_setting { 'jvm_minimum_memory':
+    ensure  => present,
+    path    => "${::bamboo::webappdir}/bin/setenv.sh",
+    section => '',
+    setting => 'JVM_MINIMUM_MEMORY',
+    value   => $::bamboo::jvm_minimum_memory,
+  }
+
+  ini_setting { 'jvm_maximum_memory':
+    ensure  => present,
+    path    => "${::bamboo::webappdir}/bin/setenv.sh",
+    section => '',
+    setting => 'JVM_MAXIMUM_MEMORY',
+    value   => $::bamboo::jvm_maximum_memory,
+  }
+
+  ini_setting { 'jvm_support_args':
+    ensure  => present,
+    path    => "${::bamboo::webappdir}/bin/setenv.sh",
+    section => '',
+    setting => 'JVM_SUPPORT_RECOMMENDED_ARGS',
+    value   => $::bamboo::jvm_support_args,
   }
 }

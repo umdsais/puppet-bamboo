@@ -8,45 +8,78 @@
 #   Explanation of what this parameter affects and what it defaults to.
 #
 class bamboo (
-  $bamboo_user    = $::bamboo::params::bamboo_user,
-  $version        = $::bamboo::params::version,
-  $download_url   = $::bamboo::params::download_url,
-  $install_dir    = $::bamboo::params::install_dir,
-  $data_dir       = $::bamboo::params::data_dir,
-  $log_dir        = $::bamboo::params::log_dir,
-  $service_manage = $::bamboo::params::service_manage,
-  $service_ensure = $::bamboo::params::service_ensure,
-  $service_enable = $::bamboo::params::service_enable,
-  $java_home      = $::bamboo::params::java_home,
-  $jvm_options    = $::bamboo::params::jvm_options,
-  $jvm_permgen    = $::bamboo::params::jvm_permgen,
-  $jvm_xms        = $::bamboo::params::jvm_xms,
-  $jvm_xmx        = $::bamboo::params::jvm_xmx,
-  $shutdown_port  = $::bamboo::params::shutdown_port,
-  $tomcat_port    = $::bamboo::params::tomcat_port,
-  $max_threads    = $::bamboo::params::max_threads,
-  $accept_count   = $::bamboo::params::accept_count,
-  $https_proxy    = $::bamboo::params::https_proxy,
-  $tomcat_ajp     = $::bamboo::params::tomcat_ajp,
-  $tomcat_ssl     = $::bamboo::params::tomcat_ssl,
-  $service_name   = $::bamboo::params::service_name,
+  # JVM settings
+  $javahome           = '/opt/java',
+  $jvm_minimum_memory = '256m',
+  $jvm_maximum_memory = '384m',
+  $jvm_support_args   = '',
+
+  # Bamboo settings
+  $version      = '5.10.2',
+  $checksum     = '1f8ec63b3165de2f58c94251588769d6',
+  $format       = 'tar.gz',
+  $installdir   = '/opt/bamboo',
+  $homedir      = '/home/bamboo',
+  $context_path = '',
+  $tomcat_port  = 8085,
+
+  # User and Group management settings
+  $manage_user = true,
+  $user        = 'bamboo',
+  $group       = 'bamboo',
+  $uid         = undef,
+  $gid         = undef,
+
+  # Misc settings
+  $download_url  = 'https://www.atlassian.com/software/bamboo/downloads/binary',
+  $deploy_module = 'archive',
+
+  # Service settings
+  $service_manage = true,
+  $service_ensure = running,
+  $service_enable = true,
+
+  # Reverse https proxy
+  $proxy = {},
+
+  # Command to stop bamboo in preparation to upgrade.
+  $stop_bamboo = 'service bamboo stop && sleep 15',
+
 ) inherits ::bamboo::params {
 
-  validate_string( $bamboo_user )
-  validate_string( $version )
-  validate_absolute_path( $install_dir )
-  validate_absolute_path( $data_dir )
-  validate_bool( $service_manage )
-  validate_bool( $service_enable )
-  validate_absolute_path( $java_home )
-  validate_string( $jvm_options )
-  validate_string( $jvm_permgen )
-  validate_string( $jvm_xms )
-  validate_string( $jvm_xmx )
-  validate_string( $shutdown_port )
-  validate_string( $tomcat_port )
-  validate_string( $max_threads )
-  validate_string( $accept_count )
+  validate_absolute_path($javahome)
+  validate_string($jvm_minimum_memory)
+  validate_string($jvm_maximum_memory)
+  validate_string($jvm_support_args)
+
+  validate_string($version)
+  validate_string($checksum)
+  validate_string($format)
+  validate_absolute_path($installdir)
+  validate_absolute_path($homedir)
+  validate_string($context_path)
+  validate_integer($tomcat_port)
+
+  validate_bool($manage_user)
+  validate_string($user)
+  validate_string($group)
+
+  validate_string($download_url)
+  validate_re($deploy_module, [ '^archive', '^staging' ])
+
+  validate_bool($service_manage)
+  validate_re($service_ensure, [ '^running', '^stopped' ])
+  validate_bool($service_enable)
+
+  validate_hash($proxy)
+
+  validate_string($stop_bamboo)
+
+  $webappdir = "${installdir}/atlassian-bamboo-${version}"
+  $file = "atlassian-bamboo-${version}.${format}"
+  $setup_properties = {
+    'bamboo.home' => $homedir,
+  }
 
   class { '::bamboo::install': } ->
   class { '::bamboo::config': } ~>

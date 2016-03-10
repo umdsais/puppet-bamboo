@@ -1,0 +1,60 @@
+#!/bin/sh
+set -e
+### BEGIN INIT INFO
+# Provides: bamboo
+# Required-Start: $local_fs $remote_fs $network $time
+# Required-Stop: $local_fs $remote_fs $network $time
+# Should-Start: $syslog
+# Should-Stop: $syslog
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
+# Short-Description: Atlassian Bamboo Server
+### END INIT INFO
+# INIT Script
+######################################
+# Define some variables
+# Name of app ( bamboo, Confluence, etc )
+APP=bamboo
+# Name of the user to run as
+USER=<%= @user %>
+# Location of application's bin directory
+BASE=<%= @webappdir %>
+JAVA_HOME=<%= @javahome %>
+tomcat_pid() {
+echo `ps aux | grep "Dcatalina.base=<%= @webappdir %>" | grep -v grep | awk '{ print $2 }'`
+}
+case "$1" in
+  # Start command
+  start)
+    echo "Starting $APP"
+    /bin/su -s /bin/sh -m $USER -c "cd $BASE/logs && $BASE/bin/startup.sh &> /dev/null"
+    ;;
+  # Stop command
+  stop)
+    echo "Stopping $APP"
+    /bin/su  -s /bin/sh -m $USER -c "$BASE/bin/shutdown.sh &> /dev/null"
+    echo "$APP stopped successfully"
+    ;;
+   # Restart command
+   restart)
+        $0 stop
+        sleep 5
+        $0 start
+        ;;
+   status)
+        pid=$(tomcat_pid)
+        if [ -n "$pid" ]
+        then
+                echo "Your Bamboo Instance is running with pid: $pid"
+                exit 0
+        else
+                echo "Your Bamboo Instance is not running"
+                exit 3
+        fi
+        ;;
+  *)
+    echo "Usage: /etc/init.d/$APP {start|restart|stop|status}"
+    exit 1
+    ;;
+esac
+exit 0

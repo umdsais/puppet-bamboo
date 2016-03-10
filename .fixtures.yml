@@ -1,6 +1,8 @@
 fixtures:
   repositories:
-    stdlib: "https://github.com/puppetlabs/puppetlabs-stdlib.git"
-    staging: "https://github.com/nanliu/puppet-staging.git"
+    stdlib: "http://github.com/puppetlabs/puppetlabs-stdlib.git"
+    inifile: "http://github.com/puppetlabs/puppetlabs-inifile.git"
+    archive: "http://github.com/puppet-community/puppet-archive"
+    staging: "http://github.com/puppet-community/puppet-staging"
   symlinks:
     bamboo: "#{source_dir}"
