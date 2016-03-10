@@ -12,7 +12,7 @@ class bamboo::config {
   }
 
   # setenv.sh settings
-  file_line {'java_home':
+  file_line {'bamboo_java_home':
     ensure => present,
     path   => "${::bamboo::webappdir}/bin/setenv.sh",
     line   => "JAVA_HOME=${::bamboo::javahome}",
@@ -26,7 +26,7 @@ class bamboo::config {
     match  => '#BAMBOO_HOME=',
   }
 
-  ini_setting { 'jvm_minimum_memory':
+  ini_setting { 'bamboo_jvm_minimum_memory':
     ensure  => present,
     path    => "${::bamboo::webappdir}/bin/setenv.sh",
     section => '',
@@ -34,7 +34,7 @@ class bamboo::config {
     value   => $::bamboo::jvm_minimum_memory,
   }
 
-  ini_setting { 'jvm_maximum_memory':
+  ini_setting { 'bamboo_jvm_maximum_memory':
     ensure  => present,
     path    => "${::bamboo::webappdir}/bin/setenv.sh",
     section => '',
@@ -42,7 +42,7 @@ class bamboo::config {
     value   => $::bamboo::jvm_maximum_memory,
   }
 
-  ini_setting { 'jvm_support_args':
+  ini_setting { 'bamboo_jvm_support_args':
     ensure  => present,
     path    => "${::bamboo::webappdir}/bin/setenv.sh",
     section => '',

@@ -30,11 +30,11 @@ describe 'bamboo' do
 
           # Config tests
           it { is_expected.to contain_file('/opt/bamboo/atlassian-bamboo-5.10.2/conf/server.xml') }
-          it { is_expected.to contain_file_line('java_home') }
+          it { is_expected.to contain_file_line('bamboo_java_home') }
           it { is_expected.to contain_file_line('bamboo_home') }
-          it { is_expected.to contain_ini_setting('jvm_minimum_memory') }
-          it { is_expected.to contain_ini_setting('jvm_maximum_memory') }
-          it { is_expected.to contain_ini_setting('jvm_support_args') }
+          it { is_expected.to contain_ini_setting('bamboo_jvm_minimum_memory') }
+          it { is_expected.to contain_ini_setting('bamboo_jvm_maximum_memory') }
+          it { is_expected.to contain_ini_setting('bamboo_jvm_support_args') }
 
           it { is_expected.to contain_service('bamboo') }
         end
@@ -169,7 +169,7 @@ describe 'bamboo' do
             )
           end
           it do
-            is_expected.to contain_file_line('java_home').with(
+            is_expected.to contain_file_line('bamboo_java_home').with(
               'ensure' => 'present',
               'path'   => '/install/path/atlassian-bamboo-5.10.1.1/bin/setenv.sh',
               'line'   => 'JAVA_HOME=/etc/alternatives/java',
@@ -185,7 +185,7 @@ describe 'bamboo' do
             )
           end
           it do
-            is_expected.to contain_ini_setting('jvm_minimum_memory').with(
+            is_expected.to contain_ini_setting('bamboo_jvm_minimum_memory').with(
               'ensure'  => 'present',
               'path'    => '/install/path/atlassian-bamboo-5.10.1.1/bin/setenv.sh',
               'section' => '',
@@ -194,7 +194,7 @@ describe 'bamboo' do
             )
           end
           it do
-            is_expected.to contain_ini_setting('jvm_maximum_memory').with(
+            is_expected.to contain_ini_setting('bamboo_jvm_maximum_memory').with(
               'ensure'  => 'present',
               'path'    => '/install/path/atlassian-bamboo-5.10.1.1/bin/setenv.sh',
               'section' => '',
@@ -203,7 +203,7 @@ describe 'bamboo' do
             )
           end
           it do
-            is_expected.to contain_ini_setting('jvm_support_args').with(
+            is_expected.to contain_ini_setting('bamboo_jvm_support_args').with(
               'ensure'  => 'present',
               'path'    => '/install/path/atlassian-bamboo-5.10.1.1/bin/setenv.sh',
               'section' => '',
