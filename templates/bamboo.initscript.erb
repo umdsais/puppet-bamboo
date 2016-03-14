@@ -27,12 +27,12 @@ case "$1" in
   # Start command
   start)
     echo "Starting $APP"
-    /bin/su -s /bin/sh -m $USER -c "cd $BASE/logs && $BASE/bin/startup.sh &> /dev/null"
+    /bin/su -s /bin/sh $USER -c "cd $BASE/logs && $BASE/bin/startup.sh &> /dev/null"
     ;;
   # Stop command
   stop)
     echo "Stopping $APP"
-    /bin/su  -s /bin/sh -m $USER -c "$BASE/bin/shutdown.sh &> /dev/null"
+    /bin/su -s /bin/sh $USER -c "$BASE/bin/shutdown.sh &> /dev/null"
     echo "$APP stopped successfully"
     ;;
    # Restart command
