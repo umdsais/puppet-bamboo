@@ -34,7 +34,7 @@
 
     <Service name="Catalina">
 
-        <Connector port="<%= @tomcat_port %>"
+        <Connector port="<%= scope['bamboo::tomcat_port'] %>"
             protocol="HTTP/1.1"
 
             maxThreads="150" minSpareThreads="25"
@@ -59,7 +59,7 @@
         <Engine name="Catalina" defaultHost="localhost">
             <Host name="localhost" appBase="webapps" unpackWARs="true" autoDeploy="true">
 
-                <Context path="<%= @context_path %>" docBase="${catalina.home}/atlassian-bamboo" reloadable="false" useHttpOnly="true">
+                <Context path="<%= scope['bamboo::context_path'] %>" docBase="${catalina.home}/atlassian-bamboo" reloadable="false" useHttpOnly="true">
                     <Manager pathname=""/>
                 </Context>
 

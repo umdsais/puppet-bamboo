@@ -12,22 +12,21 @@ set -e
 ### END INIT INFO
 # INIT Script
 ######################################
+
 # Define some variables
 # Name of app ( bamboo, Confluence, etc )
 APP=bamboo
 # Name of the user to run as
-USER=<%= @user %>
+USER=<%= scope['bamboo::user'] %>
 # Location of application's bin directory
-BASE=<%= @webappdir %>
-JAVA_HOME=<%= @javahome %>
-tomcat_pid() {
-echo `ps aux | grep "Dcatalina.base=<%= @webappdir %>" | grep -v grep | awk '{ print $2 }'`
-}
+BASE=<%= scope['bamboo::webappdir'] %>
+JAVA_HOME=<%= scope['bamboo::javahome'] %>
+
 case "$1" in
   # Start command
   start)
     echo "Starting $APP"
-    /bin/su -s /bin/sh $USER -c "cd $BASE/logs && $BASE/bin/startup.sh &> /dev/null"
+    /bin/su - $USER -c "export BAMBOO_HOME=${BAMBOO_HOME}; $BASE/bin/startup.sh &> /dev/null"
     ;;
   # Stop command
   stop)
@@ -41,20 +40,10 @@ case "$1" in
         sleep 5
         $0 start
         ;;
-   status)
-        pid=$(tomcat_pid)
-        if [ -n "$pid" ]
-        then
-                echo "Your Bamboo Instance is running with pid: $pid"
-                exit 0
-        else
-                echo "Your Bamboo Instance is not running"
-                exit 3
-        fi
-        ;;
   *)
     echo "Usage: /etc/init.d/$APP {start|restart|stop|status}"
     exit 1
     ;;
 esac
+
 exit 0
