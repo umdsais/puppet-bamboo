@@ -2,7 +2,9 @@
 #
 # This class is called from bamboo for service config.
 #
-class bamboo::config {
+class bamboo::config (
+  $proxy = $bamboo::proxy
+) {
   file { "${::bamboo::webappdir}/conf/server.xml":
     ensure  => present,
     content => template('bamboo/server.xml.erb'),
