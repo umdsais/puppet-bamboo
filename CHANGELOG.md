@@ -1,3 +1,14 @@
+## 2021-11-17 - Release 4.0.2
+
+### Summary
+
+- Adjustments by `pdk update`
+- Dropped `assert_private()` to fix collector failures
+- Dropped end of life distributions
+- Changed bamboo default version to `8.0.3`
+- Extended test suite to puppet 7
+- Updated module dependencies
+
 ## 2020-11-17 - Release 4.0.1
 
 ### Summary
