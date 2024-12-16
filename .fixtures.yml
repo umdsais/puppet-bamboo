@@ -2,12 +2,12 @@ fixtures:
   forge_modules:
     stdlib:
       repo: 'puppetlabs/stdlib'
-      ref: '5.2.0'
+      ref: '9.6.0'
     archive:
       repo: 'puppet/archive'
-      ref: '3.2.1'
+      ref: '7.1.0'
     augeas_core:
       repo: 'puppetlabs/augeas_core'
-      ref: '1.0.4'
+      ref: '1.5.0'
   symlinks:
     bamboo: "#{source_dir}"
