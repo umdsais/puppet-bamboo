@@ -107,12 +107,6 @@
 #   The value for the `-Xmx` argument to start the Bamboo JVM with. This is the maximum heap size.
 #   Defaults to `1024m`
 #
-# @param jvm_permgen
-#   The value for the `-XX:MaxPermSize` argument to start the Bamboo JVM with. This is the permanent generation heap size.
-#   Bamboo >= 5.10 requires Java 1.8, which obsoletes the `-XX:MaxPermSize` parameter.
-#   Setting this parameter on newer versions will trigger a warning.
-#   Defaults to `undef`
-#
 # @param jvm_opts
 #   Specifies any custom options to start the Bamboo JVM with.
 #   The value is prefixed to the `JAVA_OPTS` environment variable in Bamboo's `setenv.sh`
@@ -262,7 +256,6 @@ class bamboo (
   Stdlib::Unixpath                       $java_home             = '/usr/lib/jvm/java',
   Pattern[/^\d+(m|g)$/]                  $jvm_xms               = '256m',
   Pattern[/^\d+(m|g)$/]                  $jvm_xmx               = '1024m',
-  Optional[Pattern[/^\d+(m|g)$/]]        $jvm_permgen           = undef,
   String                                 $jvm_opts              = '',
   Optional[String]                       $jvm_optional          = '',
   Stdlib::Httpurl                        $download_url          = 'https://www.atlassian.com/software/bamboo/downloads/binary',
@@ -288,12 +281,6 @@ class bamboo (
   Optional[String]                       $checksum              = undef,
   Optional[Pattern[/^(none|md5|sha1|sha2|sha256|sha384|sha512)$/]] $checksum_type = 'md5',
 ) inherits bamboo::params {
-
-  if $jvm_permgen {
-    if versioncmp($version, '5.10') >= 0 {
-      warning('Bamboo >= 5.10 requires Java 1.8, which obsoletes the -XX:MaxPermSize parameter.')
-    }
-  }
 
   # Set a default value for the appdir.
   if $appdir == undef or $appdir == '' {

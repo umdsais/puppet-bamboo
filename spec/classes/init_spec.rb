@@ -175,12 +175,6 @@ describe 'bamboo' do
             it { expect { catalogue }.to raise_error(Puppet::PreformattedError, %r{got 'lazy'}) }
           end
 
-          context 'jvm_permgen' do
-            let(:params) { { jvm_permgen: 'notnum' } }
-
-            it { expect { catalogue }.to raise_error(Puppet::PreformattedError, %r{got 'notnum'}) }
-          end
-
           context 'jvm_opts' do
             let(:params) { { jvm_opts: ['should be a string'] } }
 
