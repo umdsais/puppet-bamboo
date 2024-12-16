@@ -74,7 +74,7 @@ The `bamboo` class serves as a single "point of entry" for the module.
 
 ```puppet
 class { 'bamboo':
-  version      => '6.7.1',
+  version      => '9.6.7',
   installdir   => '/opt/bamboo',
   homedir      => '/var/local/bamboo',
   user         => 'bamboo',
@@ -97,7 +97,7 @@ contain bamboo
 ```
 
 ```yaml
-bamboo::version: '6.7.1'
+bamboo::version: '9.6.7'
 bamboo::checksum: '774ec0917cccc5b90b7be3df4d661620'
 bamboo::installdir: '/opt/bamboo'
 bamboo::jvm_xms: '512m'
@@ -189,7 +189,7 @@ class { 'bamboo':
 
 ##### `version`
 
-Default: '6.7.1'
+Default: '9.6.7'
 
 The version of Bamboo to download and install.  Should be in a MAJOR.MINOR.PATH
 format.
@@ -209,8 +209,8 @@ Default: '/usr/local/bamboo'
 
 The base directory for extracting/installing Bamboo to.  Note that it will
 decompress _inside_ this directory to a directory such as
-`atlassian-bamboo-6.7.1/`  So an `installdir` of `/usr/local/bamboo` will
-ultimately install Bamboo to `/usr/local/bamboo/atlassian-bamboo-6.7.1/` by
+`atlassian-bamboo-9.6.7/`  So an `installdir` of `/usr/local/bamboo` will
+ultimately install Bamboo to `/usr/local/bamboo/atlassian-bamboo-9.6.7/` by
 default.
 
 Refer to `manage_installdir` and `appdir`
@@ -614,60 +614,44 @@ bundle exec rake beaker:default
 
 Other Beaker tests:
 ```shell
-# Test against centos-6 using Docker
+# Test against debian-11 using Docker
 PUPPET_INSTALL_TYPE=agent \
 BEAKER_debug=true \
-BEAKER_PUPPET_COLLECTION=puppet6 \
+BEAKER_PUPPET_COLLECTION=puppet7 \
 BEAKER_TESTMODE=apply \
-BEAKER_set=docker/centos-6 \
+BEAKER_set=docker/debian-11 \
 bundle exec rake beaker
 
-# Test against centos-7 using Docker
+# Test against debian-12 using Docker
 PUPPET_INSTALL_TYPE=agent \
 BEAKER_debug=true \
-BEAKER_PUPPET_COLLECTION=puppet6 \
+BEAKER_PUPPET_COLLECTION=puppet7 \
 BEAKER_TESTMODE=apply \
-BEAKER_set=docker/centos-7 \
+BEAKER_set=docker/debian-12 \
 bundle exec rake beaker
 
-# Test against debian-8 using Docker
+# Test against ubuntu-20.04 using Docker
 PUPPET_INSTALL_TYPE=agent \
 BEAKER_debug=true \
-BEAKER_PUPPET_COLLECTION=puppet6 \
+BEAKER_PUPPET_COLLECTION=puppet7 \
 BEAKER_TESTMODE=apply \
-BEAKER_set=docker/debian-8 \
+BEAKER_set=docker/ubuntu-20.04 \
 bundle exec rake beaker
 
-# Test against debian-9 using Docker
+# Test against ubuntu-22.04 using Docker
 PUPPET_INSTALL_TYPE=agent \
 BEAKER_debug=true \
-BEAKER_PUPPET_COLLECTION=puppet6 \
+BEAKER_PUPPET_COLLECTION=puppet7 \
 BEAKER_TESTMODE=apply \
-BEAKER_set=docker/debian-9 \
+BEAKER_set=docker/ubuntu-22.04 \
 bundle exec rake beaker
 
-# Test against ubuntu-14.04 using Docker
+# Test against ubuntu-24.04 using Docker
 PUPPET_INSTALL_TYPE=agent \
 BEAKER_debug=true \
-BEAKER_PUPPET_COLLECTION=puppet6 \
+BEAKER_PUPPET_COLLECTION=puppet7 \
 BEAKER_TESTMODE=apply \
-BEAKER_set=docker/ubuntu-14.04 \
-bundle exec rake beaker
-
-# Test against ubuntu-16.04 using Docker
-PUPPET_INSTALL_TYPE=agent \
-BEAKER_debug=true \
-BEAKER_PUPPET_COLLECTION=puppet6 \
-BEAKER_TESTMODE=apply \
-BEAKER_set=docker/ubuntu-16.04 \
-bundle exec rake beaker
-
-# Test against ubuntu-18.04 using Docker
-PUPPET_INSTALL_TYPE=agent \
-BEAKER_debug=true \
-BEAKER_PUPPET_COLLECTION=puppet6 \
-BEAKER_TESTMODE=apply \
-BEAKER_set=docker/ubuntu-18.04 \
+BEAKER_set=docker/ubuntu-24.04 \
 bundle exec rake beaker
 ```
 
