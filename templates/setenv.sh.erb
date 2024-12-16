@@ -8,25 +8,37 @@
 BAMBOO_HOME="<%= scope['bamboo::homedir'] %>"
 
 #
-#  Occasionally Atlassian Support may recommend that you set some specific JVM arguments.  You can use this variable below to do that.
+# Recommended JVM setting for Embedded Crowd
 #
-JVM_SUPPORT_RECOMMENDED_ARGS="<%= scope['bamboo::jvm_optional'] %>"
+: ${JVM_EC_RECOMMENDED_ARGS:=""}
 
 #
-# The following 2 settings control the minimum and maximum given to the Bamboo Java virtual machine.  In larger Bamboo instances, the maximum amount will need to be increased.
+#  Occasionally Atlassian Support may recommend that you set some specific JVM arguments.  You can use this variable below to do that.
 #
-JVM_MINIMUM_MEMORY="<%= scope['bamboo::jvm_xms'] %>"
-JVM_MAXIMUM_MEMORY="<%= scope['bamboo::jvm_xmx'] %>"
+: ${JVM_SUPPORT_RECOMMENDED_ARGS:="<%= scope['bamboo::jvm_support_args'] %>"}
+
+#
+#  Uncomment the line below to enable the Byteman agent.
+#
+#JVM_SUPPORT_RECOMMENDED_ARGS="$JVM_SUPPORT_RECOMMENDED_ARGS -javaagent:../tools/byteman/lib/byteman.jar=listener:true"
+
+#
+# The following 2 settings control the minimum and maximum given to the Bamboo Java virtual machine.  In larger Bamboo instances, the amounts will need to be increased.
+# We recommend that the minimum and maximum be set to the same value.
+#
+: ${JVM_MINIMUM_MEMORY:=<%= scope['bamboo::jvm_xms'] %>}
+: ${JVM_MAXIMUM_MEMORY:=<%= scope['bamboo::jvm_xmx'] %>}
 
 #
 # The following are the required arguments need for Bamboo standalone.
 #
-JVM_REQUIRED_ARGS=""
+: ${JVM_REQUIRED_ARGS:="-XX:+UseG1GC"}
 
 #
-# Set the catalina PID file location
+# Additional JPMS bypass. Used to bypass the encapsulation of specific packages for unnamed modules.
+# Tomcat bypasses java.base's java.lang, java.io, java.util, java.util.concurrent, and java.rmi/sun.rmi.transport by default via JDK_JAVA_OPTIONS and JAVA_OPTS in Tomcat 10 and later
 #
-CATALINA_PID="<%= scope['bamboo::real_appdir'] %>/work/catalina.pid"
+: ${JPMS_BYPASS:="--add-opens java.base/java.security=ALL-UNNAMED"}
 
 #-----------------------------------------------------------------------------------
 #
@@ -50,24 +62,14 @@ if [ "$BAMBOO_HOME" != "" ]; then
    fi
 fi
 
-<%- if scope['bamboo::jvm_permgen'] -%>
-# Perm Gen size needs to be increased if encountering OutOfMemoryError: PermGen problems. Specifying PermGen size is not valid on IBM JDKs
-BAMBOO_MAX_PERM_SIZE=<%= scope['bamboo::jvm_permgen'] %>
-if [ -f "${PRGDIR}/permgen.sh" ]; then
-    echo "Detecting JVM PermGen support..."
-    . "${PRGDIR}/permgen.sh"
-    if [ $JAVA_PERMGEN_SUPPORTED = "true" ]; then
-        echo "PermGen switch is supported. Setting to ${BAMBOO_MAX_PERM_SIZE}"
-        JAVA_OPTS="-XX:MaxPermSize=${BAMBOO_MAX_PERM_SIZE} ${JAVA_OPTS}"
-    else
-        echo "PermGen switch is NOT supported and will NOT be set automatically."
-    fi
-fi
-<%- end -%>
+#
+# JAVA_OPTS has been deprecated for startup purposes. Use CATALINA_OPTS
+#
+CATALINA_OPTS="<%= scope['bamboo::jvm_opts'] %> -Xms${JVM_MINIMUM_MEMORY} -Xmx${JVM_MAXIMUM_MEMORY} ${JAVA_OPTS} ${JVM_REQUIRED_ARGS} ${JVM_SUPPORT_RECOMMENDED_ARGS} ${JVM_EC_RECOMMENDED_ARGS} ${JPMS_BYPASS} ${BAMBOO_HOME_MINUSD} ${CATALINA_OPTS}"
 
-JAVA_OPTS="<%= scope['bamboo::jvm_opts'] %> -Xms${JVM_MINIMUM_MEMORY} -Xmx${JVM_MAXIMUM_MEMORY} ${JAVA_OPTS} ${JVM_REQUIRED_ARGS} ${JVM_SUPPORT_RECOMMENDED_ARGS} ${BAMBOO_HOME_MINUSD}"
-JAVA_OPTS=$(echo "$JAVA_OPTS" | sed -e 's/\s*$//' -e 's/^\s*//')
-export JAVA_OPTS
+CATALINA_OPTS=$(echo "$CATALINA_OPTS" | sed -e 's/\s*$//' -e 's/^\s*//')
+export CATALINA_OPTS
+unset JAVA_OPTS
 
 echo ""
 echo "If you encounter issues starting or stopping Bamboo Server, please see the Troubleshooting guide at https://confluence.atlassian.com/display/BAMBOO/Installing+and+upgrading+Bamboo"

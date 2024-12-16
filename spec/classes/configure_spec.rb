@@ -20,22 +20,22 @@ describe 'bamboo' do
 
           it do
             is_expected.to contain_file("/usr/local/bamboo/atlassian-bamboo-#{BAMBOO_VERSION}/bin/setenv.sh")
-              .with_content(%r{^JVM_SUPPORT_RECOMMENDED_ARGS=""$})
+              .with_content(%r{^: \$\{JVM_SUPPORT_RECOMMENDED_ARGS:=""\}$})
           end
 
           it do
             is_expected.to contain_file("/usr/local/bamboo/atlassian-bamboo-#{BAMBOO_VERSION}/bin/setenv.sh")
-              .with_content(%r{^JVM_MINIMUM_MEMORY="256m"$})
+              .with_content(%r{^: \$\{JVM_MINIMUM_MEMORY:=256m\}$})
           end
 
           it do
             is_expected.to contain_file("/usr/local/bamboo/atlassian-bamboo-#{BAMBOO_VERSION}/bin/setenv.sh")
-              .with_content(%r{^JVM_MAXIMUM_MEMORY="1024m"$})
+              .with_content(%r{^: \$\{JVM_MAXIMUM_MEMORY:=1024m\}$})
           end
 
           it do
             is_expected.to contain_file("/usr/local/bamboo/atlassian-bamboo-#{BAMBOO_VERSION}/bin/setenv.sh")
-              .with_content(%r{^JAVA_OPTS=" -Xms\$\{JVM_MINIMUM_MEMORY\}.*"})
+              .with_content(%r{^CATALINA_OPTS=" -Xms\$\{JVM_MINIMUM_MEMORY\}.*"})
           end
 
           it do
@@ -56,7 +56,7 @@ describe 'bamboo' do
             )
           end
         end
-        context 'bamboo::configure class with custom java_opts' do
+        context 'bamboo::configure class with custom catalina_opts' do
           let(:params) do
             {
               jvm_opts: '-Foo -Bar',
@@ -65,7 +65,7 @@ describe 'bamboo' do
 
           it do
             is_expected.to contain_file("/usr/local/bamboo/atlassian-bamboo-#{BAMBOO_VERSION}/bin/setenv.sh")
-              .with_content(%r{^JAVA_OPTS="-Foo -Bar -Xms\$\{JVM_MINIMUM_MEMORY\}.*"})
+              .with_content(%r{^CATALINA_OPTS="-Foo -Bar -Xms\$\{JVM_MINIMUM_MEMORY\}.*"})
           end
         end
         context 'bamboo::configure class with custom tomcat settings' do
