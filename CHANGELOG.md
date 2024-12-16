@@ -1,3 +1,11 @@
+## 2024-12-16 - Release 5.0.0
+
+### Summary
+
+- Dropped end of life distributions
+- Dropped PermGen support
+- Changed bamboo default version to `9.6.7`
+
 ## 2021-11-17 - Release 4.0.2
 
 ### Summary
