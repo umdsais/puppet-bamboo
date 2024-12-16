@@ -7,11 +7,13 @@ Type=forking
 Environment="JAVA_HOME=<%= scope['bamboo::java_home'] %>"
 Environment="UMASK=<%= scope['bamboo::umask'] %>"
 EnvironmentFile=-<%= scope['bamboo::initconfig_path'] %>
-PIDFile=<%= scope['bamboo::real_appdir'] %>/work/catalina.pid
+Environment=CATALINA_PID=<%= scope['bamboo::real_appdir'] %>/bin/Catalina.pid
+PIDFile=<%= scope['bamboo::real_appdir'] %>/bin/Catalina.pid
 User=<%= scope['bamboo::user'] %>
 Group=<%= scope['bamboo::group'] %>
 ExecStart=<%= scope['bamboo::real_appdir'] %>/bin/start-bamboo.sh
 ExecStop=<%= scope['bamboo::real_appdir'] %>/bin/stop-bamboo.sh
+SuccessExitStatus=143
 
 [Install]
 WantedBy=multi-user.target
