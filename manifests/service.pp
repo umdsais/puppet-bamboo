@@ -1,7 +1,6 @@
 # Private class to manage Bamboo service
 #
 class bamboo::service {
-
   if $bamboo::initconfig_manage {
     file { $bamboo::initconfig_path:
       ensure  => 'file',
@@ -42,5 +41,4 @@ class bamboo::service {
       subscribe => File[$bamboo::service_file],
     }
   }
-
 }

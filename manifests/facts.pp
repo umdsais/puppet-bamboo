@@ -1,7 +1,6 @@
 # Private class to manage Bamboo external facts
 #
 class bamboo::facts {
-
   case $bamboo::facts_ensure {
     'absent': { $file_ensure = 'absent' }
     default: { $file_ensure = 'file' }
@@ -32,5 +31,4 @@ class bamboo::facts {
       ensure => 'absent',
     }
   }
-
 }

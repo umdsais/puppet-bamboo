@@ -1,7 +1,6 @@
 # Private class to define default parameter values for Bamboo
 #
 class bamboo::params {
-
   case $facts['osfamily'] {
     'RedHat': {
       $initconfig_path = '/etc/sysconfig/bamboo'
@@ -30,7 +29,6 @@ class bamboo::params {
           fail("The bamboo module is not supported on ${facts['operatingsystem']}")
         }
       }
-
     }
 
     'Windows': {
@@ -41,7 +39,6 @@ class bamboo::params {
       fail("The bamboo module is not supported on ${facts['osfamily']}")
     }
   }
-
 
   # Where to stick the external fact for reporting the version
   # Refer to:
@@ -55,5 +52,4 @@ class bamboo::params {
   }
 
   $stop_command = 'service bamboo stop && sleep 10'
-
 }

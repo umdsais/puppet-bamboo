@@ -281,7 +281,6 @@ class bamboo (
   Optional[String]                       $checksum              = undef,
   Optional[Pattern[/^(none|md5|sha1|sha2|sha256|sha384|sha512)$/]] $checksum_type = 'md5',
 ) inherits bamboo::params {
-
   # Set a default value for the appdir.
   if $appdir == undef or $appdir == '' {
     $real_appdir = "${installdir}/atlassian-bamboo-${version}"
@@ -298,5 +297,4 @@ class bamboo (
   -> Class['bamboo::facts']
   -> Class['bamboo::configure']
   ~> Class['bamboo::service']
-
 }

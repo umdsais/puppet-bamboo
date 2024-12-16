@@ -1,7 +1,6 @@
 # Private class to manage Bamboo installation
 #
 class bamboo::install {
-
   $file = "atlassian-bamboo-${bamboo::version}.${bamboo::extension}"
 
   if $bamboo::manage_user {
@@ -102,5 +101,4 @@ class bamboo::install {
       -o \\( ! -group ${bamboo::group} \\) | wc -l | awk '{print \$1}' | grep -qE '^0'",
     path    => '/bin:/usr/bin',
   }
-
 }

@@ -27,7 +27,7 @@
       "operatingsystemrelease": [
         "7",
         "8",
-	"9"
+        "9"
       ]
     },
     {
@@ -35,22 +35,22 @@
       "operatingsystemrelease": [
         "7",
         "8",
-	"9"
+        "9"
       ]
     },
     {
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
         "11",
-	"12"
+        "12"
       ]
     },
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
         "20.04",
-	"22.04",
-	"24.04"
+        "22.04",
+        "24.04"
       ]
     }
   ],
@@ -64,7 +64,7 @@
     "bamboo",
     "atlassian"
   ],
-  "pdk-version": "2.2.0",
-  "template-url": "pdk-default#2.2.0",
-  "template-ref": "tags/2.2.0-0-g2381db6"
+  "pdk-version": "3.0.1",
+  "template-url": "pdk-default#3.0.1",
+  "template-ref": "tags/3.0.1-0-gd13288a"
 }

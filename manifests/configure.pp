@@ -1,7 +1,6 @@
 # Private class to manage Bamboo's configuration
 #
 class bamboo::configure {
-
   file { "${bamboo::real_appdir}/bin/setenv.sh":
     ensure  => 'file',
     owner   => $bamboo::user,
@@ -46,5 +45,4 @@ class bamboo::configure {
     incl    => "${bamboo::real_appdir}/conf/server.xml",
     changes => $_changes,
   }
-
 }
